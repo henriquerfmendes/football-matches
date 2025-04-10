@@ -10,17 +10,23 @@ export class WhatsAppService implements IWhatsAppService {
         folderNameToken: 'tokens',
         headless: "new",
         puppeteerOptions: {
-          args: ["--no-sandbox", "--disable-setuid-sandbox"],
+          args: [
+            "--no-sandbox", 
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-accelerated-2d-canvas",
+            "--no-first-run",
+            "--no-zygote",
+            "--single-process",
+            "--disable-gpu"
+          ],
         }
       };
       
-      const client = await venom.create(
-        "football-matches-tracker",
-        (statusSession: any) => {
-          console.log('Session status:', statusSession);
-        },
-        options
-      );
+      const client = await venom.create({
+        session: 'football-matches-tracker',
+        ...options
+      });
       return client;
     } catch (error) {
       console.error("Error creating WhatsApp client: ", error);
